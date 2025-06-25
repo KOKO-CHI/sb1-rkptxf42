@@ -10,7 +10,7 @@ export const translations = {
     },
     // Hero Section
     hero: {
-      rating: '4.9/5 - Plus de 500 clients satisfaits',
+      rating: '4.9/5 - Plus de 100 clients satisfaits',
       title: 'Nettoyage Professionnel à',
       titleHighlight: 'Ottawa-Gatineau',
       subtitle: 'Des espaces impeccables, une tranquillité d\'esprit. Service de qualité supérieure pour votre maison et votre entreprise.',
