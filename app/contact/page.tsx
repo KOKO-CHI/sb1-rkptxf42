@@ -34,7 +34,7 @@ export default function ContactPage()  {
     'Other'
   ];
 
-  const validateForm = () =>netlify { 
+  const validateForm = () =>{ 
     const newErrors: Record<string, string> = {};
     
     if (!formData.name.trim()) {
