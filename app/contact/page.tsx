@@ -68,11 +68,13 @@ export default function ContactPage()  {
 
     setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+    // For Netlify forms, we'll let the default form submission handle it
+    // But we'll add a small delay for UX
+    setTimeout(() => {
+      // The form will submit naturally to Netlify
+      const form = e.target as HTMLFormElement;
+      form.submit();
+    }, 500);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -199,7 +201,22 @@ export default function ContactPage()  {
                 {t('contact.quoteForm')}
               </h2>
               
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form 
+                name="contact" 
+                method="POST" 
+                data-netlify="true"
+                data-netlify-honeypot="bot-field"
+                onSubmit={handleSubmit} 
+                className="space-y-6"
+              >
+                {/* Hidden fields for Netlify */}
+                <input type="hidden" name="form-name" value="contact" />
+                <div className="hidden">
+                  <label>
+                    Don't fill this out if you're human: <input name="bot-field" />
+                  </label>
+                </div>
+                
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -211,6 +228,7 @@ export default function ContactPage()  {
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
+                      required
                       className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent transition-colors ${
                         errors.name ? 'border-red-500' : 'border-gray-300'
                       }`}
@@ -231,6 +249,7 @@ export default function ContactPage()  {
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
+                      required
                       className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent transition-colors ${
                         errors.phone ? 'border-red-500' : 'border-gray-300'
                       }`}
@@ -252,6 +271,7 @@ export default function ContactPage()  {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
+                    required
                     className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent transition-colors ${
                       errors.email ? 'border-red-500' : 'border-gray-300'
                     }`}
@@ -271,6 +291,7 @@ export default function ContactPage()  {
                     name="service"
                     value={formData.service}
                     onChange={handleInputChange}
+                    required
                     className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent transition-colors ${
                       errors.service ? 'border-red-500' : 'border-gray-300'
                     }`}
