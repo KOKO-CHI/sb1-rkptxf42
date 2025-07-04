@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 
-export default function ContactPage() netlify {
+export default function ContactPage()  {
   const { t, language } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
@@ -34,7 +34,7 @@ export default function ContactPage() netlify {
     'Other'
   ];
 
-  const validateForm = () => {
+  const validateForm = () =>netlify { 
     const newErrors: Record<string, string> = {};
     
     if (!formData.name.trim()) {
