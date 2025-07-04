@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 
-export default function ContactPage() {
+export default function ContactPage() netlify {
   const { t, language } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
