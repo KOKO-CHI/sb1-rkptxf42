@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 
-export default function ContactPage()  {
+export default function ContactPage() {
   const { t, language } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
@@ -34,7 +34,7 @@ export default function ContactPage()  {
     'Other'
   ];
 
-  const validateForm = () =>{ 
+  const validateForm = () => {
     const newErrors: Record<string, string> = {};
     
     if (!formData.name.trim()) {
@@ -68,13 +68,44 @@ export default function ContactPage()  {
 
     setIsSubmitting(true);
     
-    // For Netlify forms, we'll let the default form submission handle it
-    // But we'll add a small delay for UX
-    setTimeout(() => {
-      // The form will submit naturally to Netlify
-      const form = e.target as HTMLFormElement;
-      form.submit();
-    }, 500);
+    try {
+      const response = await fetch('https://formspree.io/f/mkgbawbq', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          service: formData.service,
+          message: formData.message,
+          _subject: `New quote request from ${formData.name}`, // Custom subject line
+        }),
+      });
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          service: '',
+          message: ''
+        });
+      } else {
+        throw new Error('Form submission failed');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert(language === 'fr' 
+        ? 'Erreur lors de l\'envoi du formulaire. Veuillez réessayer.' 
+        : 'Error submitting form. Please try again.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -106,14 +137,14 @@ export default function ContactPage()  {
               : 'Thank you for your request. We will contact you as soon as possible.'
             }
           </p>
-          <motion.a 
-            href="/" 
+          <motion.button
+            onClick={() => setIsSubmitted(false)}
             className="btn-primary inline-flex items-center justify-center"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            {language === 'fr' ? 'Retour à l\'accueil' : 'Back to home'}
-          </motion.a>
+            {language === 'fr' ? 'Nouveau formulaire' : 'New form'}
+          </motion.button>
         </motion.div>
       </div>
     );
@@ -201,22 +232,7 @@ export default function ContactPage()  {
                 {t('contact.quoteForm')}
               </h2>
               
-              <form 
-                name="contact" 
-                method="POST" 
-                data-netlify="true"
-                data-netlify-honeypot="bot-field"
-                onSubmit={handleSubmit} 
-                className="space-y-6"
-              >
-                {/* Hidden fields for Netlify */}
-                <input type="hidden" name="form-name" value="contact" />
-                <div className="hidden">
-                  <label>
-                    Don't fill this out if you're human: <input name="bot-field" />
-                  </label>
-                </div>
-                
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
