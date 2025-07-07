@@ -19,7 +19,7 @@ export default function ContactPage()  {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const services = language === 'fr' ? [
-    'Nettoyage x résidentiel',
+    'Nettoyage résidentiel',
     'Nettoyage commercial',
     'Nettoyage post-construction',
     'Nettoyage de fin de bail',
